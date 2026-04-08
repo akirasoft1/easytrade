@@ -4,7 +4,7 @@ Kubernetes operator for easyTrade that automatically makes changes to the deploy
 
 ## Technologies used
 
-- Golang 1.23
+- Golang 1.26
 - [Go client for Kubernetes](https://github.com/kubernetes/client-go)
 
 ## Local build instructions
@@ -72,6 +72,8 @@ When the `high_cpu_usage` feature flag is turned on, a CPU limits is applied to 
 
 This controller behavior can be altered using environment variables:
 
-| Name                                    | Description                                                          | Default |
-| --------------------------------------- | -------------------------------------------------------------------- | ------- |
-| HIGH_CPU_USAGE_BROKER_SERVICE_CPU_LIMIT | CPU resource value that should be applied during the problem pattern | 300m    |
+| Name                                    | Description                                                          | Default        |
+| --------------------------------------- | -------------------------------------------------------------------- | -------------- |
+| HIGH_CPU_USAGE_BROKER_SERVICE_NAME      | Name of the broker service deployment to target                      | broker-service |
+| HIGH_CPU_USAGE_FLAG_NAME                | Name of the feature flag that triggers this controller               | high_cpu_usage |
+| HIGH_CPU_USAGE_BROKER_SERVICE_CPU_LIMIT | CPU resource value that should be applied during the problem pattern | 300m           |

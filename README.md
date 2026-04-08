@@ -73,28 +73,21 @@ You should be able to access the app at `localhost:80` or simply `localhost`.
 
 To deploy Easytrade in kubernetes you need to have:
 
-- `kubectl` tool installed
-  - here's a [guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/) on how to get it
+- `helm`
+  - install [guide](https://helm.sh/docs/intro/install/)
+- `kubectl`
+  - install [guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 - `kubeconfig` to access the cluster you want to deploy it on
   - more info on it [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)
 
 ```bash
-# first create the namespace for it
-kubectl create namespace easytrade
+# create namespace and deploy easytrade
+helm install easytrade oci://europe-docker.pkg.dev/dynatrace-demoability/helm/easytrade --create-namespace --namespace easytrade
 
-# then use the manifests to deploy
-kubectl -n easytrade apply -f ./kubernetes-manifests/release
+# uninstall easytrade
+helm uninstall easytrade -n easytrade
 
-# Optional: if you want the problem patterns to be automatically
-# enabled once a day, deploy these manifests too
-kubectl -n easytrade apply -f ./kubernetes-manifests/problem-patterns
-
-# to get the ip of reverse proxy
-# look for EXTERNAL-IP of frontendreverseproxy
-# it may take some time before it gets assigned
-kubectl -n easytrade get svc
-
-# to delete the deployment
+# delete namespace
 kubectl delete namespace easytrade
 ```
 
@@ -176,3 +169,16 @@ can also handle XML requests. Data types are negotiated based on `Accept` and `C
 | [CreditCardOrderService](src/credit-card-order-service/README.md) | `application/xml`                                  |
 | [OfferService](src/offerservice/README.md)                        | `application/xml`; `text/xml`                      |
 | [PricingService](src/pricing-service/README.md)                   | `application/xml`                                  |
+
+## Local Dynatrace MCP Server
+
+This repository comes with the [local Dynatrace MCP Server](https://github.com/dynatrace-oss/dynatrace-mcp) pre-configured for VSCode. You can read more about [MCP Servers on VSCode](https://code.visualstudio.com/docs/copilot/customization/mcp-servers).
+In order to try it out, you need access to the [Dynatrace Playground Environment](https://docs.dynatrace.com/docs/discover-dynatrace#playground), as well as access to [GitHub Copilot](https://github.com/features/copilot).
+
+If everything is setup, please open **Copilot Chat** in VSCode, switch to **Agent mode**, and ask questions like 
+
+> Which environment am I connected to?
+
+> Are there any problems with my components on Dynatrace?
+
+> Are there any security vulnerabilities for my component?

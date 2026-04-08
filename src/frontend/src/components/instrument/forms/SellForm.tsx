@@ -1,6 +1,6 @@
 import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UseFormSetValue, useForm } from "react-hook-form"
+import { Resolver, UseFormSetValue, useForm } from "react-hook-form"
 import { FormContainer } from "react-hook-form-mui"
 import { z } from "zod"
 import { NumberFormField } from "../../NumberFormField"
@@ -15,16 +15,16 @@ import { AutofillButton } from "./AutofillButton"
 
 const formSchema = z.object({
     amount: z.coerce
-        .number({ required_error: "Amount is required" })
+        .number({ error: "Amount is required" })
         .positive("Amount must be greater than 0"),
     price: z.coerce
-        .number({ required_error: "Price is required" })
+        .number({ error: "Price is required" })
         .positive("Price must be grater than 0"),
     time: z.coerce
-        .number({ required_error: "Time range is required" })
+        .number({ error: "Time range is required" })
         .min(1, "Time range must be at least 1h")
         .max(24, "Time range must be at most 24h"),
-    total: z.number({ required_error: "Total price is required" }),
+    total: z.number({ error: "Total price is required" }),
 })
 
 export type FormData = z.infer<typeof formSchema>
@@ -51,10 +51,10 @@ function SellAutofillButton({
         sellTime: number
     ) {
         setValue("amount", sellAmount, {
-            shouldValidate: true,
+            shouldValidate: false,
         })
-        setValue("price", sellPrice, { shouldValidate: true })
-        setValue("time", sellTime, { shouldValidate: true })
+        setValue("price", sellPrice, { shouldValidate: false })
+        setValue("time", sellTime, { shouldValidate: false })
     }
 
     function setSuccessTransaction() {
@@ -87,7 +87,7 @@ export default function SellForm() {
             time: 1,
             total: 0,
         },
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(formSchema) as Resolver<FormData>,
         resetOptions: { keepDefaultValues: true },
     })
     const { setError, setSuccess, resetStatus, statusContext } =
