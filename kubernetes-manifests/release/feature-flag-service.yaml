@@ -19,7 +19,7 @@ spec:
           env: []
           resources:
             requests:
-              cpu: 30m
+              cpu: 100m
               memory: 600Mi
             limits:
               memory: 600Mi
@@ -29,7 +29,7 @@ kind: Service
 metadata:
   name: feature-flag-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: feature-flag-service
   ports:

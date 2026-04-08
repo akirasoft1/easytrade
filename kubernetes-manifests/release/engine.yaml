@@ -23,7 +23,7 @@ spec:
               value: "engine"
           resources:
             requests:
-              cpu: 10m
+              cpu: 75m
               memory: 450Mi
             limits:
               memory: 450Mi

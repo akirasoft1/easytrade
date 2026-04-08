@@ -29,7 +29,7 @@ spec:
                 name: aggregator-service-envs
           resources:
             requests:
-              cpu: 10m
-              memory: 30Mi
+              cpu: 50m
+              memory: 52Mi
             limits:
-              memory: 30Mi
+              memory: 52Mi

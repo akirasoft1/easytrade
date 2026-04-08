@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: credit-card-order-service
-          image: europe-docker.pkg.dev/dynatrace-demoability/docker/easytrade/credit-card-order-service:98288cf
+          image: us-central1-docker.pkg.dev/strategic-technical-alliances/easytrade-images/credit-card-order-service:40c5aa6
           ports:
             - containerPort: 8080
           envFrom:
@@ -35,7 +35,7 @@ spec:
                   key: JAVA_CONNECTION_STRING
           resources:
             requests:
-              cpu: 20m
+              cpu: 100m
               memory: 650Mi
             limits:
               memory: 650Mi

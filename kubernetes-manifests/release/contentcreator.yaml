@@ -22,7 +22,7 @@ spec:
                   key: JAVA_CONNECTION_STRING
           resources:
             requests:
-              cpu: 10m
+              cpu: 75m
               memory: 400Mi
             limits:
               memory: 400Mi

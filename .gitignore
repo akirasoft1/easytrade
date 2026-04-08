@@ -1,1 +1,6 @@
 .vscode
+.env
+dynakube_mvilliger_autopilot_cluster-1.yaml
+
+
+gemini-client-error-*.json

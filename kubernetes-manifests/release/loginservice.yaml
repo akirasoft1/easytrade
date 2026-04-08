@@ -26,7 +26,7 @@ spec:
                   key: DOTNET_CONNECTION_STRING
           resources:
             requests:
-              cpu: 20m
+              cpu: 75m
               memory: 450Mi
             limits:
               memory: 450Mi

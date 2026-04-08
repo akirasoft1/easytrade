@@ -30,3 +30,6 @@ environmentGroups:
             clientSecret:
               type: environment
               name: CLIENT_SECRET
+            tokenEndpoint:
+              type: environment
+              value: DYNATRACE_OAUTH_TOKEN_URL

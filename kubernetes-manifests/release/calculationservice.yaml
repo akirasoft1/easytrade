@@ -20,7 +20,7 @@ spec:
                 name: rabbitmq-vars
           resources:
             requests:
-              cpu: 10m
-              memory: 25Mi
+              cpu: 50m
+              memory: 52Mi
             limits:
-              memory: 25Mi
+              memory: 52Mi

@@ -56,7 +56,7 @@ spec:
                 name: feature-flag-service-setup
           resources:
             requests:
-              cpu: 10m
-              memory: 15Mi
+              cpu: 50m
+              memory: 52Mi
             limits:
-              memory: 15Mi
+              memory: 52Mi

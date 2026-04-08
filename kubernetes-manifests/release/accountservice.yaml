@@ -23,9 +23,7 @@ spec:
               value: "accountservice"
           resources:
             requests:
-              cpu: 30m
-              memory: 600Mi
-            limits:
+              cpu: 100m
               memory: 600Mi
 ---
 apiVersion: v1
