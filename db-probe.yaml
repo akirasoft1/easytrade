@@ -19,26 +19,9 @@ spec:
           env:
             - name: SA_PASSWORD
               value: "yourStrong(!)Password"
-          startupProbe:
-            exec:
-              command:
-                - /opt/mssql-tools/bin/sqlcmd
-                - -S
-                - localhost
-                - -U
-                - sa
-                - -P
-                - "yourStrong(!)Password"
-                - -Q
-                - "SELECT 1"
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            failureThreshold: 20
           resources:
             requests:
               cpu: 250m
-              memory: 1.5Gi
-            limits:
               memory: 1.5Gi
           readinessProbe:
             exec:
