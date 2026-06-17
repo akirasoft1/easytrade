@@ -1,0 +1,135 @@
+# gke-autopilot-values.yaml
+# Resource overrides for GKE Autopilot compatibility and LoadBalancer settings
+
+accountservice:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 600Mi
+    limits:
+      memory: 600Mi
+      # CPU limits are omitted throughout for Autopilot compatibility
+
+aggregator-service:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 52Mi
+    limits:
+      memory: 52Mi
+
+broker-service:
+  resources:
+    requests:
+      cpu: 150m
+      memory: 350Mi
+    limits:
+      memory: 350Mi
+
+calculationservice:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 128Mi
+
+contentcreator:
+  resources:
+    requests:
+      cpu: 75m
+      memory: 400Mi
+    limits:
+      memory: 400Mi
+
+credit-card-order-service:
+  # Using default image repository by intentionally omitting image override overrides.
+  # This reverts from the GCP artifact registry to the default `europe-docker.pkg.dev/...`
+  resources:
+    requests:
+      cpu: 100m
+      memory: 650Mi
+    limits:
+      memory: 650Mi
+
+db:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 1.5Gi
+    limits:
+      memory: 1.5Gi
+
+engine:
+  resources:
+    requests:
+      cpu: 75m
+      memory: 450Mi
+    limits:
+      memory: 450Mi
+
+feature-flag-service:
+  service:
+    type: LoadBalancer # From your custom manifest overrides
+  resources:
+    requests:
+      cpu: 100m
+      memory: 600Mi
+    limits:
+      memory: 600Mi
+
+frontend:
+  resources:
+    requests:
+      cpu: 50m # Increased from 15m to satisfy Autopilot minimums
+      memory: 75Mi
+    limits:
+      memory: 75Mi
+
+loginservice:
+  resources:
+    requests:
+      cpu: 75m
+      memory: 450Mi
+    limits:
+      memory: 450Mi
+
+manager:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 600Mi
+    limits:
+      memory: 600Mi
+
+pricing-service:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 80Mi
+    limits:
+      memory: 80Mi
+
+problem-operator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 128Mi
+
+rabbitmq:
+  resources:
+    requests:
+      cpu: 50m # Increased from 30m to satisfy Autopilot minimums
+      memory: 175Mi
+    limits:
+      memory: 175Mi
+
+third-party-service:
+  resources:
+    requests:
+      cpu: 75m
+      memory: 450Mi
+    limits:
+      memory: 450Mi
