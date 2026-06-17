@@ -1,5 +1,9 @@
 .vscode/*
 !.vscode/mcp.json
 .env
+.env.otel
+# Real OTel ingest-token Secret must never be committed; only the *.example.yaml is tracked.
+opentelemetry-token-secret.yaml
+**/opentelemetry-token-secret.yaml
 dynakube_mvilliger_autopilot_cluster-1.yaml
 gemini-client-error-*.json

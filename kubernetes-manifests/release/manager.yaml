@@ -8,6 +8,8 @@ spec:
       app: manager
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-dotnet: "easytrade"
       labels:
         app: manager
     spec:
