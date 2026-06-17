@@ -1,7 +1,21 @@
 # gke-autopilot-values.yaml
-# Resource overrides for GKE Autopilot compatibility and LoadBalancer settings
+# Resource overrides for GKE Autopilot compatibility and LoadBalancer settings.
+#
+# Also carries the OpenTelemetry instrumentation opt-in and the Dynatrace OneAgent
+# opt-out, applied as per-service podAnnotations (rendered by the `app` subchart's
+# _pod.tpl). This persists the zero-code OTel injection and the pure-OTel choice
+# across `helm upgrade`. See kubernetes-manifests/release/OPENTELEMETRY.md.
+#
+# The 11 services below carry:
+#   instrumentation.opentelemetry.io/inject-<lang>: "easytrade"  # OTel Operator injection
+#   dynatrace.com/inject: "false"                                # disable OneAgent (pure OTel)
+# Services WITHOUT these annotations (Go aggregator/pricing/problem-operator, frontend,
+# calculationservice, db, rabbitmq) intentionally keep OneAgent.
 
 accountservice:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-java: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 100m
@@ -19,6 +33,9 @@ aggregator-service:
       memory: 52Mi
 
 broker-service:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-dotnet: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 150m
@@ -35,6 +52,9 @@ calculationservice:
       memory: 128Mi
 
 contentcreator:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-java: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 75m
@@ -45,6 +65,9 @@ contentcreator:
 credit-card-order-service:
   # Using default image repository by intentionally omitting image override overrides.
   # This reverts from the GCP artifact registry to the default `europe-docker.pkg.dev/...`
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-java: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 100m
@@ -61,6 +84,9 @@ db:
       memory: 1.5Gi
 
 engine:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-java: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 75m
@@ -69,6 +95,9 @@ engine:
       memory: 450Mi
 
 feature-flag-service:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-java: "easytrade"
+    dynatrace.com/inject: "false"
   service:
     type: LoadBalancer # From your custom manifest overrides
   resources:
@@ -86,7 +115,15 @@ frontend:
     limits:
       memory: 75Mi
 
+loadgen:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-nodejs: "easytrade"
+    dynatrace.com/inject: "false"
+
 loginservice:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-dotnet: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 75m
@@ -95,12 +132,20 @@ loginservice:
       memory: 450Mi
 
 manager:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-dotnet: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 100m
       memory: 600Mi
     limits:
       memory: 600Mi
+
+offerservice:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-nodejs: "easytrade"
+    dynatrace.com/inject: "false"
 
 pricing-service:
   resources:
@@ -127,6 +172,9 @@ rabbitmq:
       memory: 175Mi
 
 third-party-service:
+  podAnnotations:
+    instrumentation.opentelemetry.io/inject-java: "easytrade"
+    dynatrace.com/inject: "false"
   resources:
     requests:
       cpu: 75m

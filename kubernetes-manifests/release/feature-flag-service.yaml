@@ -8,6 +8,8 @@ spec:
       app: feature-flag-service
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "easytrade"
       labels:
         app: feature-flag-service
     spec:

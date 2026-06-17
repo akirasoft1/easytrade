@@ -11,6 +11,8 @@ spec:
       app: loadgen
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "easytrade"
       labels:
         app: loadgen
     spec:

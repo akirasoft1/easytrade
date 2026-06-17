@@ -91,6 +91,19 @@ helm uninstall easytrade -n easytrade
 kubectl delete namespace easytrade
 ```
 
+## OpenTelemetry / observability
+
+The raw manifests in [`kubernetes-manifests/release/`](kubernetes-manifests/release/) are
+instrumented with OpenTelemetry via **zero-code injection by the OpenTelemetry Operator** —
+no image rebuilds or source changes. Telemetry is exported to the Bluebox/Dynatrace OTLP
+endpoint. Java, .NET, and Node services opt in through a pod annotation
+(`instrumentation.opentelemetry.io/inject-*`) and the shared
+[`Instrumentation`](kubernetes-manifests/release/opentelemetry-instrumentation.yaml) resource.
+
+See [`kubernetes-manifests/release/OPENTELEMETRY.md`](kubernetes-manifests/release/OPENTELEMETRY.md)
+for the install/deploy steps, the per-service coverage table, and the ingest-token Secret setup.
+The static OTLP config contract lives in [`.env.otel.bluebox-template`](.env.otel.bluebox-template).
+
 ## Where to start
 
 After starting easyTrade application you can:

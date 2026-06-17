@@ -1,0 +1,62 @@
+# OpenTelemetry zero-code instrumentation for easyTrade (managed via Bluebox).
+#
+# This Instrumentation custom resource is consumed by the OpenTelemetry Operator.
+# Deployments opt in with a pod annotation, e.g.:
+#   instrumentation.opentelemetry.io/inject-java: "easytrade"
+# At pod start the Operator injects an init container that copies the matching
+# language agent into the workload and sets the OTEL_* env below. No image
+# rebuild and no source changes are required.
+#
+# PREREQUISITES (install once per cluster — see OPENTELEMETRY.md):
+#   - cert-manager
+#   - opentelemetry-operator
+#
+# IMPORTANT: this resource MUST live in the SAME namespace as the easyTrade
+# workloads. Apply it (and the token Secret) into whatever namespace you deploy
+# easyTrade into.
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: easytrade
+spec:
+  # OTLP ingest endpoint resolved via `bluebox otlp-endpoint`. The injected
+  # agents append the per-signal path (/v1/traces, /v1/metrics, /v1/logs).
+  exporter:
+    endpoint: https://qgv89709.apps.dynatrace.com/api/v2/otlp
+
+  # W3C context propagation across services.
+  propagators:
+    - tracecontext
+    - baggage
+
+  # Demo deployment: capture every trace. Lower this for production volume.
+  sampler:
+    type: parentbased_always_on
+
+  # Shared resource attributes stamped onto every instrumented service.
+  resource:
+    addK8sUIDAttributes: true
+    resourceAttributes:
+      service.namespace: easytrade
+      deployment.environment: demo
+
+  # Transport + auth applied to every injected agent.
+  # - http/protobuf is the fixed Bluebox/Dynatrace transport (do NOT use gRPC/4317).
+  # - The Authorization header is sourced from a Secret you create out-of-band
+  #   (see opentelemetry-token-secret.example.yaml). The token value is NEVER
+  #   stored in this file or any tracked manifest.
+  env:
+    - name: OTEL_EXPORTER_OTLP_PROTOCOL
+      value: http/protobuf
+    - name: OTEL_EXPORTER_OTLP_HEADERS
+      valueFrom:
+        secretKeyRef:
+          name: dynatrace-otel-ingest
+          key: OTEL_EXPORTER_OTLP_HEADERS
+
+  # Per-language agent blocks. Empty = use the agent the Operator ships with.
+  # OTEL_SERVICE_NAME is derived automatically from each workload, so it is not
+  # set here.
+  java: {}
+  dotnet: {}
+  nodejs: {}
