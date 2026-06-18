@@ -113,9 +113,11 @@ public class LongTradeService(
                     false
                 );
             }
-            await _tradeRepository.SaveChanges();
         }
 
+        // Commit all processed trades in a single batch. Saving inside the loop
+        // issued one DB round-trip per trade (N+1); the entities are tracked, so a
+        // single SaveChanges here persists every change at once.
         await SaveChangesOrRollback();
     }
 

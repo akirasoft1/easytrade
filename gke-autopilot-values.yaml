@@ -33,6 +33,11 @@ aggregator-service:
       memory: 52Mi
 
 broker-service:
+  # Custom build with the long-trade N+1 fix (branch fix/broker-long-trade-nplus1,
+  # commit 30d107e), pushed to our Artifact Registry instead of the upstream image.
+  image:
+    repository: us-central1-docker.pkg.dev/strategic-technical-alliances/easytrade-images/broker-service
+    tag: "30d107e"
   podAnnotations:
     instrumentation.opentelemetry.io/inject-dotnet: "easytrade"
     dynatrace.com/inject: "false"

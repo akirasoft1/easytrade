@@ -410,6 +410,63 @@ public class LongTradeTests
         Assert.Equal(expectedAmount, userOwnedInstruments[0].Quantity);
     }
 
+    [Fact]
+    public async Task ProcessLongRunningTransactions_DoesNotCommitOncePerTrade()
+    {
+        // Processing more open trades must NOT mean more SaveChanges round-trips.
+        // The commit count is expected to be independent of the number of trades
+        // (guards against the per-iteration SaveChanges N+1 pattern).
+        var commitsForFewTrades = await CountTradeRepoCommits(openTradeCount: 2);
+        var commitsForManyTrades = await CountTradeRepoCommits(openTradeCount: 8);
+
+        Assert.Equal(commitsForFewTrades, commitsForManyTrades);
+    }
+
+    private async Task<int> CountTradeRepoCommits(int openTradeCount)
+    {
+        var time = DateTimeOffset.Now;
+        const int ownerId = 1,
+            userId = 2,
+            instrumentId = 1;
+        const decimal quantity = 1,
+            entryPrice = 4.5M;
+
+        var trades = Enumerable
+            .Range(1, openTradeCount)
+            .Select(id => new Trade(
+                id,
+                userId,
+                instrumentId,
+                nameof(ActionType.LongBuy).ToLower(),
+                quantity,
+                entryPrice,
+                time.AddDays(-1),
+                time.AddDays(1),
+                false,
+                false,
+                ""
+            ))
+            .ToArray();
+        Balance[] balances = { new Balance(ownerId, 0), new Balance(userId, 1_000_000) };
+        Price[] prices = { new Price(instrumentId, time, 5.5M, 7, 4, 5.5M) };
+        Instrument[] instruments = { new Instrument(instrumentId, 1, "code1", "name1", "desc1") };
+        Product[] products = { new Product(1, "prod1", 2.5M, "curr1") };
+
+        var tradeService = BuildFakeLongTradeService(
+            balances,
+            Array.Empty<BalanceHistory>(),
+            instruments,
+            Array.Empty<OwnedInstrument>(),
+            products,
+            prices,
+            trades
+        );
+
+        await tradeService.ProcessLongRunningTransactions();
+
+        return _tradeRepository!.SaveChangesCallCount;
+    }
+
     private LongTradeService BuildFakeLongTradeService(
         Balance[] balances,
         BalanceHistory[] balanceHistories,
