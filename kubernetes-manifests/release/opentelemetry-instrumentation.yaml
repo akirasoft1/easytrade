@@ -21,8 +21,12 @@ metadata:
 spec:
   # OTLP ingest endpoint resolved via `bluebox otlp-endpoint`. The injected
   # agents append the per-signal path (/v1/traces, /v1/metrics, /v1/logs).
+  # NOTE: use the `live.` ingest host, NOT the `apps.` host. `bluebox otlp-endpoint`
+  # returns the `apps.` URL, which returns HTTP 404 for OTLP ingest; the working
+  # OTLP ingest endpoint is `https://<env>.live.dynatrace.com/api/v2/otlp`
+  # (verified: apps -> 404, live -> 200 with a valid Api-Token).
   exporter:
-    endpoint: https://qgv89709.apps.dynatrace.com/api/v2/otlp
+    endpoint: https://qgv89709.live.dynatrace.com/api/v2/otlp
 
   # W3C context propagation across services.
   propagators:

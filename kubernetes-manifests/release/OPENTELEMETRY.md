@@ -9,7 +9,7 @@ Telemetry is sent to the Bluebox/Dynatrace OTLP endpoint resolved by
 `bluebox otlp-endpoint`:
 
 ```
-https://qgv89709.apps.dynatrace.com/api/v2/otlp   (http/protobuf)
+https://qgv89709.live.dynatrace.com/api/v2/otlp   (http/protobuf)
 ```
 
 The static transport config lives in [`../../.env.otel.bluebox-template`](../../.env.otel.bluebox-template).
