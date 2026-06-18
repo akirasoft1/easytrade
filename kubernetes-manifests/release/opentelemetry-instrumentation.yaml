@@ -62,5 +62,11 @@ spec:
   # OTEL_SERVICE_NAME is derived automatically from each workload, so it is not
   # set here.
   java: {}
-  dotnet: {}
+  # The easyTrade .NET images are Alpine (musl libc). The operator defaults the CLR
+  # profiler to the glibc build (linux-x64), which silently fails to load on musl
+  # (no spans). Point it at the musl native library shipped in the same agent image.
+  dotnet:
+    env:
+      - name: CORECLR_PROFILER_PATH
+        value: /otel-auto-instrumentation-dotnet/linux-musl-x64/OpenTelemetry.AutoInstrumentation.Native.so
   nodejs: {}
